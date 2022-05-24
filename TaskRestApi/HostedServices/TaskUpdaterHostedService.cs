@@ -64,12 +64,12 @@ public class TaskUpdaterHostedService : BackgroundService
             }
             case TaskStatus.Running:
             {
+                int timeToWait = _millisecondsToFinishTask - (DateTime.UtcNow - someTask.DateTime).Milliseconds;
+                await Task.Delay(Math.Max(0, timeToWait));
                 using var scope = _serviceScopeFactory.CreateScope();
                 await using var dbContext = scope.ServiceProvider.GetService<TaskDbContext>()!;
                 dbContext.Tasks.Attach(someTask);
                 someTask.Finish();
-                int timeToWait = _millisecondsToFinishTask - (DateTime.UtcNow - someTask.DateTime).Milliseconds;
-                await Task.Delay(Math.Max(0, timeToWait));
                 dbContext.Update(someTask);
                 await dbContext.SaveChangesAsync();
                 break;
