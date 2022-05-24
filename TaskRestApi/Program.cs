@@ -57,10 +57,6 @@ builder.Services.AddSingleton<IBackgroundTaskQueue>(ctx =>
     return new BackgroundTaskQueue(queueCapacity);
 });
 
-
-
-
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

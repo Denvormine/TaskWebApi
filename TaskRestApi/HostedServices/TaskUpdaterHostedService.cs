@@ -8,7 +8,7 @@ public class TaskUpdaterHostedService : BackgroundService
 {
     private readonly ILogger<TaskUpdaterHostedService> _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly int MillisecondsToFinishTask;
+    private readonly int _millisecondsToFinishTask;
     private readonly IBackgroundTaskQueue _taskQueue;
     public TaskUpdaterHostedService(
         IBackgroundTaskQueue taskQueue, 
@@ -19,7 +19,7 @@ public class TaskUpdaterHostedService : BackgroundService
         _taskQueue = taskQueue;
         _logger = logger;
         _serviceScopeFactory = serviceScopeFactory;
-        MillisecondsToFinishTask = millisecondsToFinishTask;
+        _millisecondsToFinishTask = millisecondsToFinishTask;
         Initialize();
     }
 
@@ -47,7 +47,7 @@ public class TaskUpdaterHostedService : BackgroundService
         }
     }
 
-    public async Task ProcessTask(SomeTask someTask)
+    private async Task ProcessTask(SomeTask someTask)
     {
         switch (someTask.Status)
         {
@@ -68,7 +68,7 @@ public class TaskUpdaterHostedService : BackgroundService
                 await using var dbContext = scope.ServiceProvider.GetService<TaskDbContext>()!;
                 dbContext.Tasks.Attach(someTask);
                 someTask.Finish();
-                int timeToWait = MillisecondsToFinishTask - (DateTime.UtcNow - someTask.DateTime).Milliseconds;
+                int timeToWait = _millisecondsToFinishTask - (DateTime.UtcNow - someTask.DateTime).Milliseconds;
                 await Task.Delay(Math.Max(0, timeToWait));
                 dbContext.Update(someTask);
                 await dbContext.SaveChangesAsync();

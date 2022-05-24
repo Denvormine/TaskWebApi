@@ -1,8 +1,5 @@
-﻿using System.Net;
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TaskRestApi.Data;
-using TaskRestApi.DbContexts;
 using TaskRestApi.Services;
 
 namespace TaskRestApi.Controllers;

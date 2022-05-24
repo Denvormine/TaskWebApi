@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TaskRestApi.Data;
+﻿using TaskRestApi.Data;
 using TaskRestApi.DbContexts;
 using TaskRestApi.HostedServices;
-using TaskStatus = TaskRestApi.Data.TaskStatus;
 
 namespace TaskRestApi.Services;
 
